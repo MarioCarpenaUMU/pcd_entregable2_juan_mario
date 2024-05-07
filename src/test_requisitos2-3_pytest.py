@@ -139,7 +139,7 @@ def test_manejar_temperatura_umbral():
 # Test para la clase CrecimientoTemperatura
 def test_comprobar_aumento():
     crecimiento = CrecimientoTemperatura()
-    assert crecimiento.comprobar_aumento(temperaturas) == True
+    assert crecimiento.comprobar_aumento(temperaturas)
 
 # Test para comprobar la cadena de responsabilidad
 def test_cadena_responsabilidad():
