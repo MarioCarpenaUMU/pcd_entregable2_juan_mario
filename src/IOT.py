@@ -5,9 +5,6 @@ import random
 import functools
 from math import sqrt
 
-
-
-
 #Puede que la función inmediata a continuación deba ir en el sigleton...
 #Función que me permite sacar una tupla de temperatura cada vez que se le llama.
 #la tupla de temperatura presenta la siguiente estructura (timestamp, temperatura)
@@ -16,8 +13,6 @@ from math import sqrt
 #     timestamp = int(time.time())                    #Esta función time de la librería time permite sacar el timestamp desde el ecpoch hasta la hora actual
 #     temperatura = round(random.uniform(-25, 95), 1) #La temperatura es generada de forma aleatoria por lo que puede darse perfectamente el caso de que 
 #     return (timestamp, temperatura)                 #ocurran cambios bruscos de temperatura.
-
-
 
 #Primer Requisito: Singleton
 
@@ -235,14 +230,30 @@ def DiferenciaAlCuadrado(lista):
         return (n-m)**2
     return f
 
+def test_singleton_instance():
+    gestor_invernadero = GestorInvernadero.obtenerControlInvernadero()
+    assert gestor_invernadero is GestorInvernadero.obtenerControlInvernadero()
+
+def test_temperature_reading():
+    gestor_invernadero = GestorInvernadero.obtenerControlInvernadero()
+    timestamp, temperature = gestor_invernadero._GestorInvernadero__leerRegistroTemperatura()
+    assert isinstance(timestamp, int)
+    assert isinstance(temperature, float)
+    assert -15 <= temperature <= 85
 
 
+def test_temperature_increase_detection():
+    comprobacion_aumento = ComprobacionAumento()
+    temperatures = [20, 30, 35, 45]
 
+    assert comprobacion_aumento.comprobar_aumento(temperatures, aumento=10)
+    assert comprobacion_aumento.comprobar_aumento(temperatures, aumento=15) 
 
 if __name__ == "__main__":
 
     invernadero = GestorInvernadero.obtenerControlInvernadero()
-
     invernadero.comenzarAnalisisTemperaturas()
+    
+
     
   
