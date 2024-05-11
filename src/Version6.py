@@ -320,14 +320,6 @@ class Cuantiles(Estrategia):
         print(f"Cuantiles:\n 25%: {percentiles[0]}º   50%: {percentiles[1]}º    75%: {percentiles[2]}º ")
 
 
-class Cuantiles(Estrategia):
-    def calcular(self, temperaturas):
-        temp = sorted(temperaturas)
-        indices = list(map(lambda x: x*(len(temperaturas)-1), [0.25, 0.50, 0.75]))
-        percentiles = [temp[int(i)] for i in indices]
-        print(f"Cuantiles:\n 25%: {percentiles[0]}º   50%: {percentiles[1]}º    75%: {percentiles[2]}º ")
-
-
 def test_generar_registro_temperatura():
     try:
         timestamp, temperatura = generarRegistroTemperatura()
