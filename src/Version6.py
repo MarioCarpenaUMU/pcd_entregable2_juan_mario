@@ -370,10 +370,6 @@ def test_cuantiles():
         pytest.fail(f"Error al calcular cuantiles: {e}")
 
 
-
-
-
-
 if __name__ == "__main__":
 
     invernadero = GestorInvernadero.obtenerControlInvernadero()
