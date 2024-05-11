@@ -308,7 +308,6 @@ class MaxMin(Estrategia):
     def calcular(self, temperaturas):
         print(f"Máx:{max(temperaturas)}º, Min:{min(temperaturas)}º")
 
-
 """Clase Cuantiles"""
 #Permite calcular los cuantiles (25%, 50%, 75%) de las temperaturas pasadas
 
