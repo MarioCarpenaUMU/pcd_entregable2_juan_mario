@@ -8,6 +8,33 @@ import numpy as np
 from itertools import combinations
 import pytest
 
+
+
+class DepartamentoError(Exception):         
+    def __init__(self, mensaje= "Error: Departamento Pasado No válido"):
+        self.message = mensaje
+        super().__init__(self.message)
+
+
+
+
+
+class NotValidType(Exception):
+    def __init__(self, mensaje="Error: El tipo proporcionado no es válido"):
+        self.message = mensaje
+        super().__init__(self.message)
+
+
+
+
+
+
+
+
+
+
+
+
 #El código a continuación se encuentra ordenado agrupando a las clases según al requisito al que responden
 
 
@@ -54,6 +81,7 @@ class GestorInvernadero:
         return Sensor()
     
     def comenzarAnalisisTemperaturas(self, duracion = None):
+        if duracion and not isinstance(duracion, int): raise NotValidType
 
         sensor1 = self.__crearSensor()
         sensor1.altaSistema(SistemaGestion())      
@@ -92,10 +120,12 @@ class Sensor:                               #Observable
         self.__sistemas_receptores = []    
 
     def altaSistema(self, sistema):
+        if not isinstance(sistema, SistemaAbstracto): raise NotValidType("Error: El sistema proporcionado No es válido")
         if sistema in self.__sistemas_receptores: raise ValueError('Sistema ya registrado')
         self.__sistemas_receptores.append(sistema)
     
     def bajaSitema(self, sistema):
+        if not isinstance(sistema, SistemaAbstracto): raise NotValidType("Error: El sistema proporcionado No es válido")
         if sistema not in self.__sistemas_receptores: raise ValueError('El sistema que pretende dar de baja no está registrado')
         self.__sistemas_receptores.remove(sistema)
 
@@ -192,6 +222,7 @@ class SistemaGestion(SistemaAbstracto, CadenaOperaciones):         #Observer
 
 class Handler:
     def __init__(self, sucesor = None):
+        if sucesor and not isinstance(sucesor, Handler): raise NotValidType('Error: Sucesor No Válido')
         self.sucesor = sucesor
 
     def manejar_operacion(self, registros):
@@ -219,9 +250,11 @@ class Handler:
 class Estadistico(Handler):
     def __init__(self, estrategia = None ,sucesor=None):
         super().__init__(sucesor)
+        if estrategia and not isinstance(estrategia, Estrategia): raise NotValidType('Error: Estrategia seleccionada No válida')
         self.__estrategia = estrategia
 
     def cambiarEstrategia(self, nueva_estrategia):
+        if not isinstance(nueva_estrategia, Estrategia): raise NotValidType('Error: Estrategia seleccionada No válida')
         self.__estrategia = nueva_estrategia
 
     def manejar_operacion(self, registros):
@@ -319,6 +352,10 @@ class Cuantiles(Estrategia):
         print(f"Cuantiles:\n 25%: {percentiles[0]}º   50%: {percentiles[1]}º    75%: {percentiles[2]}º ")
 
 
+
+
+#TESTS
+
 def test_generar_registro_temperatura():
     try:
         timestamp, temperatura = generarRegistroTemperatura()
@@ -371,7 +408,19 @@ def test_cuantiles():
 
 if __name__ == "__main__":
 
-    invernadero = GestorInvernadero.obtenerControlInvernadero()
-    invernadero.comenzarAnalisisTemperaturas(50)
+    try:
+        invernadero = GestorInvernadero.obtenerControlInvernadero()
+        invernadero.comenzarAnalisisTemperaturas(120)
+
+    except NotValidType as mensaje:
+        print(mensaje)
+        raise 
+    except ValueError as mensaje:
+        print(mensaje)
+        raise 
+    except RuntimeError as mensaje:
+        print(mensaje)
+        raise 
+        
 
  
